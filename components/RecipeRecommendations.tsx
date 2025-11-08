@@ -1,0 +1,148 @@
+
+
+import React, { useState } from 'react';
+import { getRecipeRecommendations } from '../services/geminiService';
+import { Recipe, Ingredient, RecipeFilters, ShoppingListItem } from '../types';
+import RecipeCard, { RecipeDetailModal } from './RecipeCard';
+import Spinner from './Spinner';
+import { useLanguage } from '../context/LanguageContext';
+import Header from './Header';
+import FilterModal from './FilterModal';
+import { getIngredientTranslation } from '../data/ingredients';
+
+interface RecipeRecommendationsProps {
+  ingredients: Ingredient[];
+  onBack: () => void;
+  shoppingList: ShoppingListItem[];
+  onToggleShoppingListItem: (itemName: string) => void;
+  savedRecipes: Recipe[];
+  onToggleSaveRecipe: (recipe: Recipe) => void;
+  onStartChat: (recipe: Recipe) => void;
+}
+
+const RecipeRecommendations: React.FC<RecipeRecommendationsProps> = ({ ingredients, onBack, shoppingList, onToggleShoppingListItem, savedRecipes, onToggleSaveRecipe, onStartChat }) => {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const { t, language } = useLanguage();
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [filters, setFilters] = useState<RecipeFilters>({
+    cuisine: 'any',
+    servings: 2,
+    spiciness: 'medium',
+    difficulty: 'medium',
+    maxCookTime: 45,
+  });
+  const [priorityIngredients, setPriorityIngredients] = useState<string[]>([]);
+
+  const togglePriorityIngredient = (name: string) => {
+    setPriorityIngredients(prev =>
+      prev.includes(name)
+        ? prev.filter(i => i !== name)
+        : [...prev, name]
+    );
+  };
+
+  const handleFetchRecipes = async () => {
+    if (ingredients.length === 0) {
+      setError(t('addIngredientsFirst'));
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    setRecipes([]);
+    try {
+      const ingredientNames = ingredients.map(ing => ing.name);
+      const result = await getRecipeRecommendations(ingredientNames, priorityIngredients, filters, language);
+      setRecipes(result);
+      if (result.length === 0) {
+        setError(t('noRecipesFound'));
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleApplyFilters = (newFilters: RecipeFilters) => {
+    setFilters(newFilters);
+    setIsFilterModalOpen(false);
+  };
+
+  return (
+    <div className="flex flex-col h-screen bg-background">
+      <Header title={t('aiRecTitle')} onBack={onBack} />
+      
+      <div className="flex-grow p-4 overflow-y-auto">
+        <div className="bg-brand-primary/10 text-brand-dark p-6 rounded-2xl mb-6 text-center">
+          <h2 className="text-xl font-bold mb-2">{t('aiRecBannerTitle')}</h2>
+          <p className="text-sm">{t('aiRecBannerSubtitle')}</p>
+        </div>
+
+        {ingredients.length > 0 && (
+          <div className="mb-4 bg-surface p-4 rounded-2xl">
+            <h3 className="font-bold text-text-primary mb-2">{t('priorityIngredientsTitle')}</h3>
+            <p className="text-sm text-text-secondary mb-3">{t('priorityIngredientsSubtitle')}</p>
+            <div className="flex flex-wrap gap-2">
+              {ingredients.map(ing => (
+                <button
+                  key={ing.name}
+                  onClick={() => togglePriorityIngredient(ing.name)}
+                  className={`px-3 py-1.5 border rounded-lg text-sm transition-colors ${
+                    priorityIngredients.includes(ing.name)
+                      ? 'border-brand-primary bg-brand-light font-bold'
+                      : 'border-line-light bg-background'
+                  }`}
+                >
+                  {getIngredientTranslation(ing.name, language)}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="flex gap-2 mb-4">
+          <button onClick={() => setIsFilterModalOpen(true)} className="flex-1 bg-surface border border-line-light text-text-primary font-bold py-3 px-4 rounded-xl">
+            {t('filterRecipes')}
+          </button>
+          <button onClick={handleFetchRecipes} disabled={isLoading} className="flex-1 bg-brand-primary text-white font-bold py-3 px-4 rounded-xl disabled:opacity-50">
+            {t('findRecipes')}
+          </button>
+        </div>
+        
+        {isLoading && <div className="py-8"><Spinner /></div>}
+        {error && <p className="text-red-500 text-center py-4 mt-4">{error}</p>}
+        
+        <div className="space-y-4">
+          {recipes.map((recipe, index) => (
+            <RecipeCard key={index} recipe={recipe} onSelect={() => setSelectedRecipe(recipe)}/>
+          ))}
+        </div>
+        
+        {selectedRecipe && (
+          <RecipeDetailModal 
+            recipe={selectedRecipe} 
+            onClose={() => setSelectedRecipe(null)}
+            shoppingList={shoppingList}
+            onToggleShoppingListItem={onToggleShoppingListItem}
+            isSaved={savedRecipes.some(r => r.recipeName === selectedRecipe.recipeName)}
+            onToggleSaveRecipe={onToggleSaveRecipe}
+            onStartChat={onStartChat}
+          />
+        )}
+
+        {isFilterModalOpen && (
+          <FilterModal 
+            initialFilters={filters}
+            onApply={handleApplyFilters}
+            onClose={() => setIsFilterModalOpen(false)}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default RecipeRecommendations;

@@ -1,0 +1,7 @@
+{
+  "name": " AI Recipe Assistant",
+  "description": "An AI-powered recipe recommendation service that suggests dishes based on your available ingredients, cooking skills, and preferences. Features receipt scanning to easily manage your pantry.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

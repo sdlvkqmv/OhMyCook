@@ -1,0 +1,53 @@
+export interface UserSettings {
+  cookingLevel: 'Beginner' | 'Intermediate' | 'Advanced';
+  allergies: string[];
+  preferredCuisines: string[];
+  dislikedIngredients: string[];
+  availableTools: string[];
+  spicinessPreference: number;
+  maxCookTime: number;
+}
+
+export interface Recipe {
+  recipeName: string;
+  englishRecipeName?: string;
+  description: string;
+  cookTime: number;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  spiciness: number;
+  calories: number;
+  servings: number;
+  ingredients: string[];
+  missingIngredients?: string[];
+  substitutions?: { missing: string; substitute: string; }[];
+  instructions: string[];
+  cuisine: string;
+}
+
+export interface ChatMessage {
+  role: 'user' | 'model';
+  parts: { text: string }[];
+}
+
+export interface Ingredient {
+  name: string;
+  quantity: string;
+}
+
+export interface RecipeFilters {
+  cuisine: 'any' | 'korean' | 'japanese' | 'chinese' | 'western';
+  servings: number;
+  spiciness: 'mild' | 'medium' | 'spicy';
+  difficulty: 'easy' | 'medium' | 'hard';
+  maxCookTime: number;
+}
+
+export interface ShoppingListItem {
+  name: string; // The canonical English name
+}
+
+export interface User {
+  email: string;
+  password: string;
+  hasCompletedOnboarding: boolean;
+}
