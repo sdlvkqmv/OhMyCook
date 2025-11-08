@@ -1,0 +1,22 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="80" height="80" rx="12" fill="#FF7F00"/>
+  <!-- Pot -->
+  <g fill="#FFFFFF">
+    <path d="M12 66C12 51 68 51 68 66V74H12V66Z" />
+    <path d="M6 59H12V67H6C5.44772 67 5 66.5523 5 66V60C5 59.4477 5.44772 59 6 59Z" />
+    <path d="M74 59H68V67H74C74.5523 67 75 66.5523 75 66V60C75 59.4477 74.5523 59 74 59Z" />
+    <path d="M14 52C14 43 66 43 66 52H14Z" />
+    <path d="M34 40H46C47.1046 40 48 40.8954 48 42V44H32V42C32 40.8954 32.8954 40 34 40Z" />
+  </g>
+  <!-- Face -->
+  <g>
+    <circle cx="32" cy="62" r="2.5" fill="#212121" />
+    <circle cx="48" cy="62" r="2.5" fill="#212121" />
+    <path d="M36 68C36 71 44 71 44 68" stroke="#212121" fill="none" stroke-width="2" stroke-linecap="round" />
+  </g>
+  <!-- Speech Bubble -->
+  <g>
+    <path d="M60 15C54 4 40 7 42 22C44 37 59 32 60 40L61 32C66 25 76 9 60 15Z" fill="#FFFFFF"/>
+    <text x="49" y="27" fill="#FF7F00" font-family="Pretendard, sans-serif" font-size="10" font-weight="bold">oh!</text>
+  </g>
+</svg>

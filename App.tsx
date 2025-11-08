@@ -11,7 +11,6 @@ import Onboarding from './components/Onboarding';
 import ShoppingList from './components/ShoppingList';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { LogoIcon, ProfileIcon, BasketIcon, MagicWandIcon, ChatBubbleIcon, TrendingUpIcon, CameraIcon, ShoppingCartIcon, BookmarkIcon } from './components/icons';
-import { analyzeReceipt } from './services/geminiService';
 import { INGREDIENT_DATA } from './data/ingredients';
 import Spinner from './components/Spinner';
 import SavedRecipes from './components/SavedRecipes';
@@ -101,6 +100,7 @@ const ReceiptScanner: React.FC<{ onBack: () => void, onScanComplete: (newIngredi
     setIsScanning(true);
     setError(null);
     try {
+      const { analyzeReceipt } = await import('./services/geminiService');
       const file = image instanceof File ? image : new File([image], "receipt.jpg", { type: 'image/jpeg' });
       const base64Image = await fileToBase64(file);
       const items = await analyzeReceipt(base64Image);

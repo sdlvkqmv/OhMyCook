@@ -1,6 +1,5 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { chatWithAIChef } from '../services/geminiService';
 import { UserSettings, ChatMessage, Recipe } from '../types';
 import { SendIcon, LogoIcon } from './icons';
 import Spinner from './Spinner';
@@ -41,6 +40,7 @@ const AIChef: React.FC<AIChefProps> = ({ settings, onBack, recipeContext }) => {
     }));
 
     try {
+      const { chatWithAIChef } = await import('../services/geminiService');
       const responseText = await chatWithAIChef(history, textToSend, settings, language, recipeContext);
       const modelMessage: ChatMessage = { role: 'model', parts: [{ text: responseText }] };
       setMessages(prev => [...prev, modelMessage]);

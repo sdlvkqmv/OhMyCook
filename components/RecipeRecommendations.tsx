@@ -1,7 +1,6 @@
 
 
 import React, { useState } from 'react';
-import { getRecipeRecommendations } from '../services/geminiService';
 import { Recipe, Ingredient, RecipeFilters, ShoppingListItem } from '../types';
 import RecipeCard, { RecipeDetailModal } from './RecipeCard';
 import Spinner from './Spinner';
@@ -53,6 +52,7 @@ const RecipeRecommendations: React.FC<RecipeRecommendationsProps> = ({ ingredien
     setError(null);
     setRecipes([]);
     try {
+      const { getRecipeRecommendations } = await import('../services/geminiService');
       const ingredientNames = ingredients.map(ing => ing.name);
       const result = await getRecipeRecommendations(ingredientNames, priorityIngredients, filters, language);
       setRecipes(result);
