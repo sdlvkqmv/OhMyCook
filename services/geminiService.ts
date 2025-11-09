@@ -12,15 +12,17 @@ async function callGeminiApi(action: string, payload: any) {
     });
 
     if (!response.ok) {
-      let errorData;
+      // Read the response body as text first, to avoid "body stream already read" error.
+      const errorText = await response.text();
       try {
-        errorData = await response.json();
+        // Try to parse the text as JSON to get a structured error message.
+        const errorData = JSON.parse(errorText);
+        throw new Error(errorData.error || `API call failed with status: ${response.status}`);
       } catch (e) {
-        // If response is not JSON, read as text
-        const errorText = await response.text();
+        // If parsing fails, it's not a JSON response, so use the raw text as the error.
+        // This handles cases like Vercel serverless function timeouts which return plain text/HTML.
         throw new Error(errorText || `API call failed with status: ${response.status}`);
       }
-      throw new Error(errorData.error || `API call failed with status: ${response.status}`);
     }
 
     return await response.json();
