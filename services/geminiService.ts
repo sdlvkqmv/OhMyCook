@@ -12,7 +12,14 @@ async function callGeminiApi(action: string, payload: any) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        // If response is not JSON, read as text
+        const errorText = await response.text();
+        throw new Error(errorText || `API call failed with status: ${response.status}`);
+      }
       throw new Error(errorData.error || `API call failed with status: ${response.status}`);
     }
 
