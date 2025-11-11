@@ -78,6 +78,8 @@ async function handleGetRecipeRecommendations(ai: GoogleGenAI, payload: { ingred
         ${recipeConditions}
         ${priorityPromptPart.en}
         
+        CRITICAL: You must generate a complete response in under 25 seconds to avoid a server timeout.
+
         IMPORTANT RULE: Base your recommendations on the ingredients I have. For any recipe that requires ingredients I don't have, you MUST provide a common, sensible substitute in the 'substitutions' field. If you cannot find a suitable substitute for a missing ingredient, you MUST NOT recommend that recipe. Your primary goal is to provide actionable recipes I can cook by acquiring just a few common substitutes.
         
         For each recipe, provide all the detailed information as per the schema. Make sure to list all ingredients I am missing in the 'missingIngredients' field.
@@ -88,6 +90,8 @@ async function handleGetRecipeRecommendations(ai: GoogleGenAI, payload: { ingred
         다음 조건에 정확히 맞는 다양하고 맛있는 한국어 레시피 3가지를 추천해주세요:
         ${recipeConditions}
         ${priorityPromptPart.ko}
+        
+        매우 중요: 서버 시간 초과를 피하기 위해 25초 이내에 완전한 응답을 생성해야 합니다.
 
         중요 규칙: 제가 가진 재료를 기반으로 레시피를 추천해주세요. 만약 레시피에 제가 가지지 않은 재료가 필요하다면, 반드시 'substitutions' 필드에 일반적이고 합리적인 대체 재료를 제안해야 합니다. 만약 없는 재료에 대한 적절한 대체재를 찾을 수 없다면, 그 레시피는 절대 추천해서는 안 됩니다. 당신의 최우선 목표는 제가 몇 가지 일반적인 대체 재료만 구하면 바로 요리할 수 있는 실행 가능한 레시피를 제공하는 것입니다.
 
@@ -140,7 +144,7 @@ async function handleAnalyzeReceipt(ai: GoogleGenAI, payload: { base64Image: str
 
 async function handleChatWithAIChef(ai: GoogleGenAI, payload: { history: ChatMessage[], message: string, settings: UserSettings, language: 'en' | 'ko', recipeContext?: Recipe | null }): Promise<string> {
     const { history, message, settings, language, recipeContext } = payload;
-    const model = 'gemini-2.5-pro';
+    const model = 'gemini-2.5-flash';
     
     const systemInstructions = {
         en: `You are 'AI Chef', a helpful and friendly cooking assistant for the OhMyCook app. Your answers should be in English. Keep them concise, friendly, and easy to understand. The user's profile is: Cooking Level: ${settings.cookingLevel}, Allergies: ${settings.allergies.join(', ') || 'None'}, Available Tools: ${settings.availableTools.join(', ') || 'Basic'}.`,
