@@ -115,7 +115,7 @@ async function handleGetRecipeRecommendations(ai: GoogleGenAI, payload: { ingred
 
 async function handleAnalyzeReceipt(ai: GoogleGenAI, payload: { base64Image: string }): Promise<string[]> {
     const { base64Image } = payload;
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-2.5-pro';
     const prompt = "Analyze this receipt image. Extract only the names of the food ingredients purchased. Return the result as a JSON array of strings in English. For example: [\"Egg\", \"Green Onion\", \"Tofu\"]. Do not include quantities, prices, or any other text.";
 
     const imagePart = {
