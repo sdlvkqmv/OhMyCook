@@ -1,0 +1,44 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&amp;display=swap');
+      .cls-orange { fill: #F26B3A; }
+      .cls-dark { fill: #4A3B32; }
+      .cls-text { 
+        font-family: 'Nunito', 'Arial Rounded MT Bold', sans-serif; 
+        font-weight: 700;
+        fill: #F26B3A;
+        font-size: 60px;
+        text-anchor: middle;
+      }
+      .cls-bubble-text {
+        font-family: 'Nunito', 'Arial Rounded MT Bold', sans-serif;
+        font-weight: 800;
+        fill: #FFFFFF;
+        font-size: 40px;
+        text-anchor: middle;
+      }
+    </style>
+  </defs>
+
+  <g transform="translate(0, 20)">
+    <rect x="236" y="100" width="40" height="15" rx="5" class="cls-orange" />
+    
+    <path d="M176,145 Q256,90 336,145 Z" class="cls-orange" />
+    
+    <path d="M166,160 H346 A20,20 0 0 1 366,180 V250 A45,45 0 0 1 321,295 H191 A45,45 0 0 1 146,250 V180 A20,20 0 0 1 166,160 Z" class="cls-orange" />
+    
+    <rect x="126" y="155" width="260" height="20" rx="10" class="cls-orange" />
+    
+    <circle cx="220" cy="210" r="9" class="cls-dark" />
+    <circle cx="290" cy="210" r="9" class="cls-dark" />
+    <path d="M235,225 Q255,245 275,225" fill="none" stroke="#4A3B32" stroke-width="8" stroke-linecap="round" />
+  </g>
+
+  <g transform="translate(285, 55)">
+    <path d="M0,30 A25,25 0 0,1 50,30 A25,25 0 0,1 100,30 Q100,65 50,100 Q0,65 0,30 Z" class="cls-orange" />
+    <text x="50" y="60" class="cls-bubble-text">oh!</text>
+  </g>
+
+  <text x="256" y="380" class="cls-text">OhMyCook</text>
+</svg>
