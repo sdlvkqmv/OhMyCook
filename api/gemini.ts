@@ -75,7 +75,7 @@ async function handleGetRecipeRecommendations(ai: GoogleGenAI, payload: { ingred
       - Max Cook Time: ${filters.maxCookTime} minutes
       
       TASK:
-      Recommend 3 diverse and delicious recipes matching these conditions.
+      Recommend 5 diverse and delicious recipes matching these conditions.
       
       IMPORTANT OUTPUT INSTRUCTIONS:
       1. **Language**: Return all user-facing text (name, description, ingredients list) in **${targetLanguage}**.
@@ -174,7 +174,8 @@ async function handleAnalyzeReceipt(ai: GoogleGenAI, payload: { base64Image: str
 
 async function handleChatWithAIChef(ai: GoogleGenAI, payload: { history: ChatMessage[], message: string, settings: UserSettings, language: 'en' | 'ko', recipeContext?: Recipe | null }): Promise<string> {
     const { history, message, settings, language, recipeContext } = payload;
-    const model = 'gemini-2.5-flash';
+    // Updated to use the Pro model for better reasoning and chat experience
+    const model = 'gemini-3-pro-preview';
     const targetLanguage = language === 'ko' ? 'Korean' : 'English';
     
     let systemInstruction = `
@@ -194,86 +195,57 @@ async function handleChatWithAIChef(ai: GoogleGenAI, payload: { history: ChatMes
         systemInstruction += `
         
         CURRENT RECIPE CONTEXT:
-        - Recipe Name: "${recipeContext.recipeName}"
-        - Description: ${recipeContext.description}
-        - Ingredients: ${recipeContext.ingredients.join(', ')}
-        
-        Answer questions specifically related to this recipe if asked.
+        Name: ${recipeContext.recipeName}
+        Ingredients: ${recipeContext.ingredients.join(', ')}
+        Instructions: ${recipeContext.instructions.join('\n')}
         `;
     }
-
-    const chatHistory = history.map(msg => ({
-        role: msg.role,
-        parts: msg.parts.map(p => ({text: p.text}))
-    }));
 
     const chat = ai.chats.create({
         model: model,
         config: {
             systemInstruction: systemInstruction,
         },
-        history: chatHistory,
+        history: history as any
     });
 
-    const response: GenerateContentResponse = await chat.sendMessage({ message: message });
-    return response.text;
+    const result = await chat.sendMessage({ message });
+    return result.text;
 }
 
+export async function POST(request: Request) {
+  const { action, payload } = await request.json();
+  const apiKey = process.env.API_KEY;
+  const ai = new GoogleGenAI({ apiKey });
 
-export default async function handler(req: Request) {
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method Not Allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const API_KEY = process.env.API_KEY;
-  if (!API_KEY) {
-    console.error("API_KEY environment variable not set on the server.");
-    return new Response(JSON.stringify({ error: 'Server configuration error: API_KEY is missing.' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  const ai = new GoogleGenAI({ apiKey: API_KEY });
+  let result;
 
   try {
-    const { action, payload } = await req.json();
-    let result;
-
     switch (action) {
-      case 'getRecipeRecommendations':
-        result = await handleGetRecipeRecommendations(ai, payload);
-        break;
-      case 'getRecipeDetails':
-        result = await handleGetRecipeDetails(ai, payload);
-        break;
-      case 'analyzeReceipt':
-        result = await handleAnalyzeReceipt(ai, payload);
-        break;
-      case 'chatWithAIChef':
-        result = await handleChatWithAIChef(ai, payload);
-        break;
-      default:
-        return new Response(JSON.stringify({ error: `Invalid action: ${action}` }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        });
-    }
-
-    return new Response(JSON.stringify({ result }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-
+        case 'getRecipeRecommendations':
+          result = await handleGetRecipeRecommendations(ai, payload);
+          break;
+        case 'getRecipeDetails':
+           result = await handleGetRecipeDetails(ai, payload);
+           break;
+        case 'analyzeReceipt':
+          result = await handleAnalyzeReceipt(ai, payload);
+          break;
+        case 'chatWithAIChef':
+          result = await handleChatWithAIChef(ai, payload);
+          break;
+        default:
+          throw new Error('Invalid action');
+      }
+    
+      return new Response(JSON.stringify({ result }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
   } catch (error) {
-    console.error('Error handling API request:', error);
-    const errorMessage = error instanceof Error ? error.message : 'An unknown internal server error occurred.';
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+      console.error("API Error:", error);
+      return new Response(JSON.stringify({ error: (error as Error).message }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+      });
   }
 }
