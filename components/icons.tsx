@@ -1,31 +1,25 @@
-
 import React from 'react';
 
 // General
 export const LogoIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <svg viewBox="0 0 80 80" className={className} xmlns="http://www.w3.org/2000/svg">
-      {/* Pot */}
-      <g fill="#FFFFFF">
-          <path d="M12 66C12 51 68 51 68 66V74H12V66Z" />
-          <path d="M6 59H12V67H6C5.44772 67 5 66.5523 5 66V60C5 59.4477 5.44772 59 6 59Z" />
-          <path d="M74 59H68V67H74C74.5523 67 75 66.5523 75 66V60C75 59.4477 74.5523 59 74 59Z" />
-          <path d="M14 52C14 43 66 43 66 52H14Z" />
-          <path d="M34 40H46C47.1046 40 48 40.8954 48 42V44H32V42C32 40.8954 32.8954 40 34 40Z" />
+  <svg viewBox="0 0 512 512" className={className} xmlns="http://www.w3.org/2000/svg">
+    <rect width="512" height="512" fill="#F26B3A" />
+    <g transform="translate(-128, -138) scale(1.5)">
+      <g transform="translate(0, 76)">
+        <rect x="236" y="100" width="40" height="15" rx="5" fill="#FFFFFF" />
+        <path d="M176,145 Q256,90 336,145 Z" fill="#FFFFFF" />
+        <path d="M166,160 H346 A20,20 0 0 1 366,180 V250 A45,45 0 0 1 321,295 H191 A45,45 0 0 1 146,250 V180 A20,20 0 0 1 166,160 Z" fill="#FFFFFF" />
+        <rect x="126" y="155" width="260" height="20" rx="10" fill="#FFFFFF" />
+        <circle cx="220" cy="210" r="9" fill="#4A3B32" />
+        <circle cx="290" cy="210" r="9" fill="#4A3B32" />
+        <path d="M235,225 Q255,245 275,225" fill="none" stroke="#4A3B32" strokeWidth="8" strokeLinecap="round" />
       </g>
-      {/* Face */}
-      <g>
-          <circle cx="32" cy="62" r="2.5" fill="#212121" />
-          <circle cx="48" cy="62" r="2.5" fill="#212121" />
-          <path d="M36 68C36 71 44 71 44 68" stroke="#212121" fill="none" strokeWidth="2" strokeLinecap="round" />
+      <g transform="translate(285, 111)">
+        <path d="M0,30 A25,25 0 0,1 50,30 A25,25 0 0,1 100,30 Q100,65 50,100 Q0,65 0,30 Z" fill="#FFFFFF" />
       </g>
-      {/* Speech Bubble */}
-      <g>
-          <path d="M60 15C54 4 40 7 42 22C44 37 59 32 60 40L61 32C66 25 76 9 60 15Z" fill="#FFFFFF"/>
-          <text x="49" y="27" fill="#FF7F00" fontFamily="Pretendard, sans-serif" fontSize="10" fontWeight="bold">oh!</text>
-      </g>
+    </g>
   </svg>
 );
-
 
 export const BackArrowIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -34,7 +28,7 @@ export const BackArrowIcon: React.FC<{ className?: string }> = ({ className }) =
 );
 
 export const XIcon: React.FC<{ className?: string }> = ({ className }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 );
 
 export const PlusIcon: React.FC<{ className?: string }> = ({ className }) => (
@@ -52,9 +46,9 @@ export const ProfileIcon: React.FC<{ className?: string }> = ({ className }) => 
 
 export const FridgeIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M5 2H19C20.1046 2 21 2.89543 21 4V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V4C3 2.89543 3.89543 2 5 2Z" />
-      <path d="M3 10H21" />
-      <path d="M6 6V7" />
+    <path d="M5 2H19C20.1046 2 21 2.89543 21 4V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V4C3 2.89543 3.89543 2 5 2Z" />
+    <path d="M3 10H21" />
+    <path d="M6 6V7" />
   </svg>
 );
 
