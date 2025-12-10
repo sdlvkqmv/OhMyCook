@@ -34,7 +34,7 @@ const IngredientModal: React.FC<IngredientModalProps> = ({ isOpen, onClose, onAd
         resetForm();
         onClose();
     };
-    
+
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setName(value);
@@ -85,7 +85,7 @@ const IngredientModal: React.FC<IngredientModalProps> = ({ isOpen, onClose, onAd
                     <XIcon className="w-6 h-6" />
                 </button>
                 <h2 className="text-xl font-bold text-text-primary mb-6 text-center">{t('addIngredientTitle')}</h2>
-                
+
                 <div className="space-y-4">
                     <div className="relative">
                         <label className="text-sm font-bold text-text-secondary block mb-1">{t('ingredientName')}</label>
@@ -96,7 +96,7 @@ const IngredientModal: React.FC<IngredientModalProps> = ({ isOpen, onClose, onAd
                             placeholder={t('ingredientNamePlaceholder')}
                             className="w-full bg-background border border-line-light rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-primary/50"
                         />
-                         {Object.keys(suggestions).length > 0 && (
+                        {Object.keys(suggestions).length > 0 && (
                             <div className="absolute z-10 w-full mt-1 border border-line-light rounded-lg max-h-48 overflow-y-auto bg-surface shadow-lg">
                                 {/* FIX: Replaced `Object.entries` with `Object.keys` to avoid a type inference issue where the value was being treated as 'unknown', causing a crash when calling `.map`. */}
                                 {Object.keys(suggestions).map((cat) => (
@@ -105,11 +105,12 @@ const IngredientModal: React.FC<IngredientModalProps> = ({ isOpen, onClose, onAd
                                         <ul>
                                             {suggestions[cat].map(ing => (
                                                 <li key={ing.en}>
-                                                    <button 
+                                                    <button
                                                         onClick={() => handleSuggestionClick(ing)}
-                                                        className="w-full text-left p-2 text-sm text-text-primary hover:bg-brand-light"
+                                                        className="w-full text-left p-2 text-sm text-text-primary hover:bg-brand-light flex items-center gap-2"
                                                     >
-                                                        {getIngredientTranslation(ing.en, language)}
+                                                        <span className="text-lg">{ing.emoji}</span>
+                                                        <span>{getIngredientTranslation(ing.en, language)}</span>
                                                     </button>
                                                 </li>
                                             ))}
@@ -121,17 +122,17 @@ const IngredientModal: React.FC<IngredientModalProps> = ({ isOpen, onClose, onAd
                     </div>
                     <div>
                         <label className="text-sm font-bold text-text-secondary block mb-1">{t('category')}</label>
-                         <select
+                        <select
                             value={category}
                             // FIX: The type of `e.target.value` is a generic string, which is not assignable to the specific string literal union type of the `category` state. Cast it to the correct type to resolve the type mismatch.
                             onChange={(e) => setCategory(e.target.value as typeof category)}
                             className="w-full bg-background border border-line-light rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-primary/50 disabled:bg-gray-100"
                             disabled
-                         >
+                        >
                             {INGREDIENT_CATEGORIES.map(cat => (
                                 <option key={cat} value={cat}>{t(cat as any)}</option>
                             ))}
-                         </select>
+                        </select>
                     </div>
 
                     <div>
