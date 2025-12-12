@@ -71,13 +71,14 @@ export const translations = {
     oven: 'Oven',
     blender: 'Blender',
     // Ingredient Manager
-    ingredientManagerTitle: 'Manage Ingredients',
+    ingredientManagerTitle: 'Add Ingredients',
     searchIngredients: 'Search ingredients...',
     addIngredient: 'Add Ingredient',
     myFridge: 'My Fridge',
     scanWithReceipt: 'Scan with Receipt',
     noSearchResults: 'No search results found.',
-    pleaseAddIngredients: 'Please add ingredients.',
+    pleaseAddIngredients: 'Your fridge is empty!',
+    scanning: 'Scanning...',
     // Ingredient Modal
     addIngredientTitle: 'Add Ingredient',
     ingredientName: 'Ingredient Name',
@@ -286,6 +287,7 @@ export const translations = {
     scanWithReceipt: '영수증으로 스캔',
     noSearchResults: '검색 결과가 없습니다.',
     pleaseAddIngredients: '재료를 추가해주세요.',
+    scanning: '스캔 중...',
     // Ingredient Modal
     addIngredientTitle: '재료 추가',
     ingredientName: '재료명',
@@ -315,7 +317,7 @@ export const translations = {
     ingredients: '재료',
     missingIngredients: '없는 재료',
     instructions: '요리 방법',
-     // AI Chef
+    // AI Chef
     aiChefTitle: 'AI 요리 어시스턴트',
     aiChefGreeting: '안녕하세요! 요리 관련 질문이 있으시면 언제든 물어보세요. 재료 손질법, 조리 온도, 대체 재료 등 무엇이든 도와드립니다.',
     askAnything: '궁금한 점을 물어보세요...',
@@ -401,7 +403,7 @@ export const translations = {
     seasoning: '조미료/소스',
     nutsSeeds: '견과류/씨앗',
     others: '기타',
-     // Auth
+    // Auth
     login: '로그인',
     signup: '회원가입',
     logout: '로그아웃',
