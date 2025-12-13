@@ -25,7 +25,7 @@ const defaultSettings: UserSettings = {
   maxCookTime: 30,
 };
 
-type Tab = 'cook' | 'popular' | 'profile';
+type Tab = 'cook' | 'chat' | 'popular' | 'profile';
 type View = 'tab' | 'onboarding' | 'recommendations' | 'chat' | 'shoppingList' | 'savedRecipes' | 'auth';
 
 // Main App Content Component
@@ -154,6 +154,15 @@ const AppContent: React.FC = () => {
             setIngredients={setIngredients}
             // onBack removed as it is main tab
             onGenerateRecipe={() => handleNavigate('recommendations')}
+          />
+        );
+      case 'chat':
+        return (
+          <AIChef
+            settings={settings}
+            onBack={() => { }} // Tab view, no back action
+            showBack={false}
+            recipeContext={null} // General chat
           />
         );
       case 'popular':

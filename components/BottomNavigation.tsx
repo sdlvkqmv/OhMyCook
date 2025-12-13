@@ -1,8 +1,8 @@
 import React from 'react';
-import { ChefHatIcon, TrendingUpIcon, ProfileIcon } from './icons';
+import { ChefHatIcon, TrendingUpIcon, ProfileIcon, ChatBubbleIcon } from './icons';
 import { useLanguage } from '../context/LanguageContext';
 
-type Tab = 'cook' | 'popular' | 'profile';
+type Tab = 'cook' | 'chat' | 'popular' | 'profile';
 
 interface BottomNavigationProps {
     currentTab: Tab;
@@ -14,6 +14,8 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentTab, onTabCh
 
     const tabs: { id: Tab; icon: React.ElementType; label: string }[] = [
         { id: 'cook', icon: ChefHatIcon, label: t('cook') || 'Cook' },
+
+        { id: 'chat', icon: ChatBubbleIcon, label: t('chat') || 'Chat' },
         { id: 'popular', icon: TrendingUpIcon, label: t('popular') || 'Popular' },
         { id: 'profile', icon: ProfileIcon, label: t('profile') || 'Profile' },
     ];
@@ -31,8 +33,8 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ currentTab, onTabCh
                         >
                             <div
                                 className={`p-2 rounded-full transition-all duration-300 ${isActive
-                                        ? 'bg-orange-500 text-white shadow-lg shadow-orange-200 transform -translate-y-4 border-4 border-white'
-                                        : 'text-gray-400 hover:text-gray-600'
+                                    ? 'bg-orange-500 text-white shadow-lg shadow-orange-200 transform -translate-y-4 border-4 border-white'
+                                    : 'text-gray-400 hover:text-gray-600'
                                     }`}
                             >
                                 <tab.icon className={`w-6 h-6 ${isActive ? 'w-7 h-7' : ''}`} />

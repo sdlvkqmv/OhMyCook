@@ -28,6 +28,7 @@ export const translations = {
     savedRecipesSubtitle: 'Your favorite dishes',
     // Navigation
     cook: 'Cook',
+    chat: 'Chat',
     popular: 'Popular',
     profile: 'Profile',
     navigate: 'Navigate',
@@ -112,11 +113,13 @@ export const translations = {
     addIngredientsFirst: 'Please add ingredients first.',
     noRecipesFound: 'No recipes found with the current filters. Try adjusting your search.',
     filterRecipes: 'Filter Recipes',
-    findRecipes: 'Generate Recipes',
+    findRecipes: 'Find Recipes',
     priorityIngredientsTitle: 'Priority Ingredients',
     priorityIngredientsSubtitle: 'Select ingredients you want to use up first.',
     loadingRecipes: 'AI chef is crafting your personalized recipes...',
     loadingRecipesAlmostDone: 'Just a moment... AI is putting the final touches on your recipes!',
+    recommendationPlaceholderTitle: 'Ready to find your next meal?',
+    recommendationPlaceholderSubtitle: 'Select your priority ingredients and adjust filters to get the perfect recipe from our AIChef.',
     // Recipe Detail Modal
     ingredients: 'Ingredients',
     missingIngredients: 'Missing Ingredients',
@@ -250,6 +253,7 @@ export const translations = {
     savedRecipesSubtitle: '즐겨찾는 요리',
     // Navigation
     cook: '요리',
+    chat: '채팅',
     popular: '인기',
     profile: '프로필',
     navigate: '이동',
@@ -339,6 +343,8 @@ export const translations = {
     priorityIngredientsSubtitle: '먼저 사용하고 싶은 재료를 선택하세요.',
     loadingRecipes: 'AI 셰프가 맞춤 레시피를 만들고 있어요...',
     loadingRecipesAlmostDone: '잠시만요... AI가 레시피에 마지막 손길을 더하고 있어요!',
+    recommendationPlaceholderTitle: '맛있는 요리를 찾을 준비가 되셨나요?',
+    recommendationPlaceholderSubtitle: '우선 사용할 재료를 선택하고 필터를 조절하여 AI 셰프의 완벽한 추천을 받아보세요.',
     // Recipe Detail Modal
     ingredients: '재료',
     missingIngredients: '없는 재료',
