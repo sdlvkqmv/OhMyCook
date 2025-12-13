@@ -1,19 +1,38 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { User, UserSettings } from '../types';
 import MainHeader from './MainHeader';
 import { ProfileIcon, BookmarkIcon, ShoppingCartIcon } from './icons';
+import Onboarding from './Onboarding';
 
 interface ProfileProps {
     user: User | null;
     settings: UserSettings;
     onLogout: () => void;
     onNavigate: (view: any) => void;
+    onUpdateSettings: (settings: UserSettings) => void;
 }
 
-const Profile: React.FC<ProfileProps> = ({ user, settings, onLogout, onNavigate }) => {
+const Profile: React.FC<ProfileProps> = ({ user, settings, onLogout, onNavigate, onUpdateSettings }) => {
     const { t, language, setLanguage } = useLanguage();
+    const [showSettings, setShowSettings] = useState(false);
+
+    if (showSettings) {
+        return (
+            <div className="fixed inset-0 z-[100] bg-background">
+                <Onboarding
+                    initialSettings={settings}
+                    onSave={(newSettings) => {
+                        onUpdateSettings(newSettings);
+                        setShowSettings(false);
+                    }}
+                    onBack={() => setShowSettings(false)}
+                    skipIngredients={true}
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col h-full bg-background pb-20">
@@ -58,8 +77,6 @@ const Profile: React.FC<ProfileProps> = ({ user, settings, onLogout, onNavigate 
 
                 {/* Settings Section */}
                 <div className="space-y-3">
-                    <h3 className="font-bold text-lg text-text-primary ml-1">{t('settings')}</h3>
-
                     <div className="bg-surface rounded-xl border border-line-light overflow-hidden">
                         <button
                             onClick={() => setLanguage(language === 'en' ? 'ko' : 'en')}
@@ -71,10 +88,13 @@ const Profile: React.FC<ProfileProps> = ({ user, settings, onLogout, onNavigate 
                             </span>
                         </button>
 
-                        <div className="p-4 border-b border-line-light last:border-0 flex justify-between items-center">
-                            <span className="font-medium text-text-primary">{t('cookingLevel')}</span>
-                            <span className="text-text-secondary">{t(settings.cookingLevel.toLowerCase() as any)}</span>
-                        </div>
+                        <button
+                            onClick={() => setShowSettings(true)}
+                            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 border-b border-line-light last:border-0"
+                        >
+                            <span className="font-medium text-text-primary">{t('customSettings')}</span>
+                            <span className="text-text-secondary">➜</span>
+                        </button>
                     </div>
                 </div>
 

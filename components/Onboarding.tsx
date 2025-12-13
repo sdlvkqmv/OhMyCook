@@ -10,6 +10,7 @@ interface OnboardingProps {
   initialSettings: UserSettings;
   onSave: (settings: UserSettings, initialIngredients: string[]) => void;
   onBack: () => void;
+  skipIngredients?: boolean;
 }
 
 const ProgressBar: React.FC<{ step: number; totalSteps: number }> = ({ step, totalSteps }) => (
@@ -21,12 +22,12 @@ const ProgressBar: React.FC<{ step: number; totalSteps: number }> = ({ step, tot
   </div>
 );
 
-const Onboarding: React.FC<OnboardingProps> = ({ initialSettings, onSave, onBack }) => {
+const Onboarding: React.FC<OnboardingProps> = ({ initialSettings, onSave, onBack, skipIngredients = false }) => {
   const [step, setStep] = useState(1);
   const [settings, setSettings] = useState<UserSettings>(initialSettings);
   const [selectedInitialIngredients, setSelectedInitialIngredients] = useState<string[]>([]);
   const { t, language } = useLanguage();
-  const totalSteps = 6;
+  const totalSteps = skipIngredients ? 5 : 6;
 
   const [customIngredientSearch, setCustomIngredientSearch] = useState('');
   const [searchSuggestions, setSearchSuggestions] = useState<(typeof ALL_INGREDIENTS[0])[]>([]);

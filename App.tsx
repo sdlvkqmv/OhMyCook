@@ -183,6 +183,7 @@ const AppContent: React.FC = () => {
             settings={settings}
             onLogout={handleLogout}
             onNavigate={handleNavigate}
+            onUpdateSettings={handleSaveSettings}
           />
         );
       default:

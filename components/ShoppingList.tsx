@@ -43,7 +43,15 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ shoppingList, setShoppingLi
             </ul>
           </>
         ) : (
-          <p className="text-center text-text-secondary mt-10">{t('shoppingListEmpty')}</p>
+          <div className="flex flex-col items-center justify-center py-20 px-4 text-center opacity-70">
+            <div className="text-6xl mb-6">🛒</div>
+            <h3 className="text-xl font-bold text-text-primary mb-2">
+              {t('shoppingListEmpty')}
+            </h3>
+            <p className="text-text-secondary max-w-xs mx-auto leading-relaxed">
+              {t('shoppingListDetails')}
+            </p>
+          </div>
         )}
       </div>
     </div>

@@ -34,6 +34,7 @@ export const translations = {
     navigate: 'Navigate',
     // Settings
     settings: 'Settings',
+    customSettings: 'Custom Settings',
     language: 'Language',
     generateRecipe: 'Cook',
     selectIngredients: 'Select Ingredients',
@@ -113,7 +114,7 @@ export const translations = {
     addIngredientsFirst: 'Please add ingredients first.',
     noRecipesFound: 'No recipes found with the current filters. Try adjusting your search.',
     filterRecipes: 'Filter Recipes',
-    findRecipes: 'Find Recipes',
+    findRecipes: 'Generate Recipes',
     priorityIngredientsTitle: 'Priority Ingredients',
     priorityIngredientsSubtitle: 'Select ingredients you want to use up first.',
     loadingRecipes: 'AI chef is crafting your personalized recipes...',
@@ -157,11 +158,13 @@ export const translations = {
     cameraError: 'Could not open camera. Please check permissions.',
     // Shopping List
     shoppingListEmpty: 'Your shopping list is empty.',
+    shoppingListDetails: 'Add missing ingredients from recipes or add them manually.',
     addToShoppingList: 'Add to List',
     addedToShoppingList: 'Added',
     clearShoppingList: 'Clear List',
     // Saved Recipes
     savedRecipesEmpty: 'You haven\'t saved any recipes yet.',
+    savedRecipesDetails: 'Save delicious recipes you find to access them quickly here.',
     saveRecipe: 'Save Recipe',
     unsaveRecipe: 'Unsave',
     // Settings Modal
@@ -259,6 +262,7 @@ export const translations = {
     navigate: '이동',
     // Settings
     settings: '설정',
+    customSettings: '맞춤 설정',
     language: '언어',
     generateRecipe: '레시피 생성',
     selectIngredients: '재료 선택',
@@ -382,11 +386,13 @@ export const translations = {
     cameraError: '카메라를 열 수 없습니다. 권한을 확인해주세요.',
     // Shopping List
     shoppingListEmpty: '장바구니가 비어있습니다.',
+    shoppingListDetails: '레시피에서 부족한 재료를 추가하거나 직접 입력하세요.',
     addToShoppingList: '목록에 추가',
     addedToShoppingList: '추가됨',
     clearShoppingList: '목록 비우기',
     // Saved Recipes
     savedRecipesEmpty: '저장된 레시피가 없습니다.',
+    savedRecipesDetails: '마음에 드는 레시피를 저장하여 여기서 빠르게 찾아보세요.',
     saveRecipe: '레시피 저장',
     unsaveRecipe: '저장 취소',
     // Settings Modal
