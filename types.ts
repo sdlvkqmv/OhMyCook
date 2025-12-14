@@ -75,7 +75,7 @@ export interface ShoppingListItem {
 
 export interface User {
   email: string;
-  password: string;
+  password?: string;
   hasCompletedOnboarding: boolean;
 }
 

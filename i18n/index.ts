@@ -241,6 +241,8 @@ export const translations = {
     switchToLogin: 'Already have an account? Login',
     welcomeUser: 'Welcome, {{email}}!',
     backToHome: 'Back to Home',
+    loginFailed: 'Login failed. Please try again.',
+    continueWithGoogle: 'Continue with Google',
   },
   ko: {
     // App
@@ -483,5 +485,7 @@ export const translations = {
     switchToLogin: '이미 계정이 있으신가요? 로그인',
     welcomeUser: '환영합니다, {{email}}님!',
     backToHome: '홈으로 돌아가기',
+    loginFailed: '로그인에 실패했습니다. 다시 시도해주세요.',
+    continueWithGoogle: 'Google로 계속하기',
   },
 };

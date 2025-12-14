@@ -16,6 +16,7 @@ import LandingPage from './components/LandingPage';
 import BottomNavigation from './components/BottomNavigation';
 import Profile from './components/Profile';
 import PageTransition from './components/PageTransition';
+import { supabase } from './services/supabaseClient';
 
 const defaultSettings: UserSettings = {
   cookingLevel: 'Beginner',
@@ -61,6 +62,43 @@ const AppContent: React.FC = () => {
 
   useEffect(() => {
     setIsInitialLoad(false);
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user?.email) {
+        const email = session.user.email;
+        // Check if user exists in local storage
+        setUsers(prevUsers => {
+          const existingUser = prevUsers.find(u => u.email === email);
+          if (existingUser) {
+            setCurrentUser(existingUser);
+            if (existingUser.hasCompletedOnboarding) {
+              setCurrentView('tab');
+              setCurrentTab('cook');
+            } else {
+              setCurrentView('onboarding');
+            }
+            return prevUsers;
+          } else {
+            // New user from social auth
+            const newUser: User = {
+              email,
+              hasCompletedOnboarding: false,
+            };
+            setCurrentUser(newUser); // Will trigger onboarding if not completed
+            setCurrentView('onboarding'); // Force onboarding for new Google users
+            return [...prevUsers, newUser];
+          }
+        });
+      } else if (event === 'SIGNED_OUT') {
+        setCurrentUser(null);
+        setCurrentView('tab');
+        setCurrentTab('cook');
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -165,7 +203,8 @@ const AppContent: React.FC = () => {
     setCurrentView('auth');
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     setCurrentUser(null);
     setCurrentView('tab');
     setCurrentTab('cook'); // Or stay on profile? Better to go to home/auth.
