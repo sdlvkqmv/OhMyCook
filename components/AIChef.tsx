@@ -39,12 +39,26 @@ const AIChef: React.FC<AIChefProps> = ({
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  useEffect(() => {
+    setMessages(initialMessages);
+  }, [initialMessages]);
+
   // Sync messages to parent when they change
   useEffect(() => {
     if (onMessagesUpdate && messages.length > 0) {
       onMessagesUpdate(messages);
     }
   }, [messages, onMessagesUpdate]);
+
+  // If chat opened from a recipe with no history, start with an ingredient-aware greeting
+  useEffect(() => {
+    if (recipeContext && openedFromRecipe && messages.length === 0) {
+      const preview = recipeContext.ingredients.slice(0, 6).join(', ');
+      const introText = `${t('aiChefGreeting')}${preview ? `\n${t('ingredients')}: ${preview}` : ''}`;
+      const introMessage: ChatMessage = { role: 'model', parts: [{ text: introText }] };
+      setMessages([introMessage]);
+    }
+  }, [recipeContext, openedFromRecipe, messages.length, t]);
 
   // Handle back button
   const handleBack = () => {
@@ -104,7 +118,11 @@ const AIChef: React.FC<AIChefProps> = ({
               <LogoIcon className="w-5 h-5 text-white" />
             </div>
             <div className="bg-surface p-3 rounded-lg rounded-bl-none shadow-subtle">
-              <p className="text-sm text-text-primary">{t('aiChefGreeting')}</p>
+              <p className="text-sm text-text-primary whitespace-pre-line">
+                {recipeContext && messages.length === 0
+                  ? `${t('aiChefGreeting')}\n${t('ingredients')}: ${recipeContext.ingredients.slice(0, 6).join(', ')}`
+                  : t('aiChefGreeting')}
+              </p>
             </div>
           </div>
         </div>

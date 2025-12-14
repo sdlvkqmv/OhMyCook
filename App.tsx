@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useLocalStorage } from './hooks/useLocalStorage';
-import { UserSettings, Ingredient, ShoppingListItem, Recipe, User, ChatMessage } from './types';
+import { UserSettings, Ingredient, ShoppingListItem, Recipe, User, ChatMessage, RecipeFilters } from './types';
 import IngredientManager from './components/IngredientManager';
 import RecipeRecommendations from './components/RecipeRecommendations';
 import AIChef from './components/AIChef';
@@ -43,6 +43,18 @@ const AppContent: React.FC = () => {
   const [ingredients, setIngredients] = useLocalStorage<Ingredient[]>(`ohmycook-ingredients-${userStorageSuffix}`, []);
   const [shoppingList, setShoppingList] = useLocalStorage<ShoppingListItem[]>(`ohmycook-shoppinglist-${userStorageSuffix}`, []);
   const [savedRecipes, setSavedRecipes] = useLocalStorage<Recipe[]>(`ohmycook-savedrecipes-${userStorageSuffix}`, []);
+
+  const defaultRecipeFilters: RecipeFilters = {
+    cuisine: 'any',
+    servings: 2,
+    spiciness: 'medium',
+    difficulty: 'medium',
+    maxCookTime: 45,
+  };
+
+  const [cachedRecipes, setCachedRecipes] = useLocalStorage<Recipe[]>(`ohmycook-recipes-${userStorageSuffix}`, []);
+  const [cachedRecipeFilters, setCachedRecipeFilters] = useLocalStorage<RecipeFilters>(`ohmycook-recipefilters-${userStorageSuffix}`, defaultRecipeFilters);
+  const [cachedPriorityIngredients, setCachedPriorityIngredients] = useLocalStorage<string[]>(`ohmycook-priority-${userStorageSuffix}`, []);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Navigation State
@@ -51,7 +63,7 @@ const AppContent: React.FC = () => {
   const [previousView, setPreviousView] = useState<View>('tab');
   const [navigationDirection, setNavigationDirection] = useState<'left' | 'right' | 'fade'>('left');
   const [chatContext, setChatContext] = useState<Recipe | null>(null);
-  const [chatHistories, setChatHistories] = useState<Record<string, ChatMessage[]>>({});
+  const [chatHistories, setChatHistories] = useLocalStorage<Record<string, ChatMessage[]>>(`ohmycook-chatHistories-${userStorageSuffix}`, {});
   const [chatOpenedFromRecipe, setChatOpenedFromRecipe] = useState<Recipe | null>(null);
   const [openedRecipeModal, setOpenedRecipeModal] = useState<Recipe | null>(null);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
@@ -139,12 +151,13 @@ const AppContent: React.FC = () => {
   };
 
   const handleToggleSaveRecipe = (recipeToToggle: Recipe) => {
+    const normalizedRecipe: Recipe = recipeToToggle.isDetailsLoaded === false ? { ...recipeToToggle, isDetailsLoaded: true } : recipeToToggle;
     setSavedRecipes(prev => {
-      const exists = prev.some(r => r.recipeName === recipeToToggle.recipeName);
+      const exists = prev.some(r => r.recipeName === normalizedRecipe.recipeName);
       if (exists) {
-        return prev.filter(r => r.recipeName !== recipeToToggle.recipeName);
+        return prev.filter(r => r.recipeName !== normalizedRecipe.recipeName);
       } else {
-        return [...prev, recipeToToggle];
+        return [...prev, normalizedRecipe];
       }
     });
   };
@@ -160,8 +173,18 @@ const AppContent: React.FC = () => {
   };
 
   const handleSignup = (newUser: Pick<User, 'email' | 'password'>) => {
+    const exists = users.some(u => u.email.toLowerCase() === newUser.email.toLowerCase());
+    if (exists) {
+      return { ok: false, reason: 'duplicate' as const };
+    }
     setUsers(prev => [...prev, { ...newUser, hasCompletedOnboarding: false }]);
     setCurrentView('auth');
+    return { ok: true as const };
+  };
+
+  const handleRecipeDetailsLoaded = (updatedRecipe: Recipe) => {
+    setSavedRecipes(prev => prev.map(r => r.recipeName === updatedRecipe.recipeName ? { ...r, ...updatedRecipe, isDetailsLoaded: true } : r));
+    setCachedRecipes(prev => prev.map(r => r.recipeName === updatedRecipe.recipeName ? { ...r, ...updatedRecipe } : r));
   };
 
   const handleLogout = () => {
@@ -180,6 +203,7 @@ const AppContent: React.FC = () => {
           <IngredientManager
             ingredients={ingredients}
             setIngredients={setIngredients}
+            onLogoClick={() => { setCurrentView('tab'); setCurrentTab('cook'); }}
             // onBack removed as it is main tab
             onGenerateRecipe={() => handleNavigate('recommendations')}
           />
@@ -197,6 +221,7 @@ const AppContent: React.FC = () => {
         return (
           <PopularRecipes
             onBack={() => { }} // No back needed for main tab
+            onLogoClick={() => { setCurrentView('tab'); setCurrentTab('cook'); }}
             shoppingList={shoppingList}
             onToggleShoppingListItem={handleToggleShoppingListItem}
             savedRecipes={savedRecipes}
@@ -214,6 +239,7 @@ const AppContent: React.FC = () => {
             onLogout={handleLogout}
             onNavigate={handleNavigate}
             onUpdateSettings={handleSaveSettings}
+            onLogoClick={() => { setCurrentView('tab'); setCurrentTab('cook'); }}
           />
         );
       default:
@@ -264,6 +290,14 @@ const AppContent: React.FC = () => {
                     onStartChat={handleStartChat}
                     initialOpenedRecipe={openedRecipeModal}
                     onRecipeModalChange={setOpenedRecipeModal}
+                    cachedRecipes={cachedRecipes}
+                    onRecipesChange={setCachedRecipes}
+                    filters={cachedRecipeFilters}
+                    onFiltersChange={setCachedRecipeFilters}
+                    priorityIngredients={cachedPriorityIngredients}
+                    onPriorityIngredientsChange={setCachedPriorityIngredients}
+                    onRecipeDetailsLoaded={handleRecipeDetailsLoaded}
+                    onLogoClick={() => { setCurrentView('tab'); setCurrentTab('cook'); }}
                   />
                 </PageTransition>
               );

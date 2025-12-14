@@ -140,13 +140,14 @@ export const RecipeDetailModal: React.FC<{
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 className="bg-surface rounded-2xl shadow-lg w-full max-w-lg max-h-[90vh] flex flex-col relative overflow-hidden"
             >
-                <div className="overflow-y-auto flex-grow p-6 custom-scrollbar">
-                    <div className="flex justify-between items-start">
-                        <h2 className="text-2xl font-bold text-text-primary mb-4 pr-16">{recipe.recipeName}</h2>
-                        <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+                <div className="overflow-y-auto flex-grow custom-scrollbar">
+                    <div className="sticky top-0 z-20 bg-surface/95 backdrop-blur-sm px-6 pt-6 pb-3 border-b border-line-light flex justify-between items-start gap-4">
+                        <h2 className="text-2xl font-bold text-text-primary pr-4 leading-snug">{recipe.recipeName}</h2>
+                        <div className="flex items-center gap-2">
                             <button
-                                onClick={() => onToggleSaveRecipe(recipe)}
-                                className={`transition-colors hover:text-brand-primary ${isSaved ? 'text-brand-primary' : 'text-text-secondary'}`}
+                                onClick={() => onToggleSaveRecipe(recipe.isDetailsLoaded === false ? { ...recipe, isDetailsLoaded: true } : recipe)}
+                                disabled={isLoadingDetails}
+                                className={`transition-colors hover:text-brand-primary ${isSaved ? 'text-brand-primary' : 'text-text-secondary'} ${isLoadingDetails ? 'opacity-60 cursor-not-allowed' : ''}`}
                                 title={isSaved ? t('unsaveRecipe') : t('saveRecipe')}
                             >
                                 <BookmarkIcon className="w-6 h-6" isFilled={isSaved} />
@@ -156,6 +157,8 @@ export const RecipeDetailModal: React.FC<{
                             </button>
                         </div>
                     </div>
+
+                    <div className="p-6">
 
                     <div className="mb-6 rounded-xl overflow-hidden shadow-sm h-48 w-full relative">
                         <ImageWithFallback src={imageUrl} alt={recipe.recipeName} className="w-full h-full object-cover" />
@@ -262,11 +265,12 @@ export const RecipeDetailModal: React.FC<{
                             )}
                         </div>
                     </div>
+                    </div>
                 </div>
 
                 <button
                     onClick={() => onStartChat(recipe)}
-                    className="absolute bottom-24 right-6 bg-brand-primary text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform z-30"
+                    className="absolute bottom-6 right-5 bg-brand-primary text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform z-30"
                     title={t('askAIChef')}
                 >
                     <ChatBubbleIcon className="w-6 h-6" />
