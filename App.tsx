@@ -521,7 +521,7 @@ const AppContent: React.FC = () => {
             case 'auth':
               return (
                 <PageTransition key="auth" direction={navigationDirection}>
-                  <Auth onLogin={handleLogin} onSignup={handleSignup} users={users} onBack={() => { setNavigationDirection('right'); setCurrentView('tab'); setCurrentTab('cook'); }} initialMode={authMode} />
+                  <Auth onBack={() => { setNavigationDirection('right'); setCurrentView('tab'); setCurrentTab('cook'); }} initialMode={authMode} />
                 </PageTransition>
               );
             case 'onboarding':

@@ -243,6 +243,7 @@ export const translations = {
     backToHome: 'Back to Home',
     loginFailed: 'Login failed. Please try again.',
     continueWithGoogle: 'Continue with Google',
+    checkEmailForConfirmation: 'Check your email for the confirmation link.',
   },
   ko: {
     // App
@@ -487,5 +488,6 @@ export const translations = {
     backToHome: '홈으로 돌아가기',
     loginFailed: '로그인에 실패했습니다. 다시 시도해주세요.',
     continueWithGoogle: 'Google로 계속하기',
+    checkEmailForConfirmation: '이메일함에서 확인 링크를 눌러주세요.',
   },
 };
