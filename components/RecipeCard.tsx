@@ -53,18 +53,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onSelect }) => {
 
     return (
         <div 
-            onClick={isLoadingDetails ? undefined : onSelect} 
-            className={`bg-surface rounded-2xl shadow-subtle overflow-hidden flex transition-shadow relative ${
-                isLoadingDetails 
-                    ? 'opacity-60 cursor-not-allowed' 
-                    : 'cursor-pointer hover:shadow-lg'
-            }`}
+            onClick={onSelect} 
+            className="bg-surface rounded-2xl shadow-subtle overflow-hidden flex cursor-pointer hover:shadow-lg transition-shadow relative"
         >
-            {isLoadingDetails && (
-                <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
-                    <Spinner size="sm" />
-                </div>
-            )}
             <ImageWithFallback src={imageUrl} alt={recipe.recipeName} className="w-28 h-auto object-cover" />
             <div className="p-4 flex flex-col justify-between flex-grow">
                 <div>
@@ -158,9 +149,14 @@ export const RecipeDetailModal: React.FC<{
                         <h2 className="text-2xl font-bold text-text-primary pr-4 leading-snug">{recipe.recipeName}</h2>
                         <div className="flex items-center gap-2">
                             <button
-                                onClick={() => onToggleSaveRecipe(recipe.isDetailsLoaded === false ? { ...recipe, isDetailsLoaded: true } : recipe)}
-                                disabled={isLoadingDetails}
-                                className={`transition-colors hover:text-brand-primary ${isSaved ? 'text-brand-primary' : 'text-text-secondary'} ${isLoadingDetails ? 'opacity-60 cursor-not-allowed' : ''}`}
+                                onClick={() => {
+                                    if (isLoadingDetails) {
+                                        alert(t('loadingCompleteBeforeBookmark') || '로딩이 완료된 후 북마크할 수 있습니다.');
+                                        return;
+                                    }
+                                    onToggleSaveRecipe(recipe);
+                                }}
+                                className={`transition-colors hover:text-brand-primary ${isSaved ? 'text-brand-primary' : 'text-text-secondary'}`}
                                 title={isSaved ? t('unsaveRecipe') : t('saveRecipe')}
                             >
                                 <BookmarkIcon className="w-6 h-6" isFilled={isSaved} />
