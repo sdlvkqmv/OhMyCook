@@ -467,7 +467,12 @@ const AppContent: React.FC = () => {
       .update({ likes: newLikes })
       .eq('id', postId);
 
-    if (error) console.error("Like update failed:", error);
+    if (error) {
+      console.error("Like update failed:", error);
+      alert(`좋아요 업데이트 실패: ${error.message}\n\nSupabase RLS 정책을 확인해주세요.`);
+      // Revert optimistic update
+      fetchCommunityPostsDetailed();
+    }
   };
 
   const handleAddCommunityComment = async (postId: string, content: string) => {
