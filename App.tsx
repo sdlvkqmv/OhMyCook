@@ -316,7 +316,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="h-[100dvh] overflow-hidden bg-background text-text-primary font-sans transition-colors duration-300 max-w-lg mx-auto relative shadow-2xl">
+    <div className="h-[100dvh] overflow-hidden bg-background text-text-primary font-sans transition-colors duration-300 relative w-full">
       {renderView()}
     </div>
   );
