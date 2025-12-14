@@ -7,6 +7,7 @@ export const translations = {
     mainTitle: 'OhMyCook',
     mainSubtitle: 'AI custom recipes made with ingredients from your fridge',
     loginButton: 'Login / Sign Up',
+    getStarted: 'Get Started',
     homeFooter: 'Meet AI that recommends recipes when you select ingredients',
     // Home Screen Menu
     profileTitle: 'Profile',
@@ -25,6 +26,20 @@ export const translations = {
     shoppingListSubtitle: 'Manage your grocery needs',
     savedRecipesTitle: 'Saved Recipes',
     savedRecipesSubtitle: 'Your favorite dishes',
+    // Navigation
+    cook: 'Cook',
+    chat: 'Chat',
+    popular: 'Popular',
+    profile: 'Profile',
+    navigate: 'Navigate',
+    // Settings
+    settings: 'Settings',
+    customSettings: 'Custom Settings',
+    language: 'Language',
+    generateRecipe: 'Cook',
+    selectIngredients: 'Select Ingredients',
+    noIngredients: 'No ingredients found. Add some to your fridge!',
+    done: 'Done',
     // Onboarding
     onboardingTitle: 'Please select your cooking level',
     onboardingSubtitle: 'We recommend recipes that match your skill level',
@@ -71,13 +86,14 @@ export const translations = {
     oven: 'Oven',
     blender: 'Blender',
     // Ingredient Manager
-    ingredientManagerTitle: 'Manage Ingredients',
+    ingredientManagerTitle: 'Add Ingredients',
     searchIngredients: 'Search ingredients...',
     addIngredient: 'Add Ingredient',
     myFridge: 'My Fridge',
     scanWithReceipt: 'Scan with Receipt',
     noSearchResults: 'No search results found.',
-    pleaseAddIngredients: 'Please add ingredients.',
+    pleaseAddIngredients: 'Your fridge is empty!',
+    scanning: 'Scanning...',
     // Ingredient Modal
     addIngredientTitle: 'Add Ingredient',
     ingredientName: 'Ingredient Name',
@@ -98,11 +114,13 @@ export const translations = {
     addIngredientsFirst: 'Please add ingredients first.',
     noRecipesFound: 'No recipes found with the current filters. Try adjusting your search.',
     filterRecipes: 'Filter Recipes',
-    findRecipes: 'Find Recipes',
+    findRecipes: 'Generate Recipes',
     priorityIngredientsTitle: 'Priority Ingredients',
     priorityIngredientsSubtitle: 'Select ingredients you want to use up first.',
     loadingRecipes: 'AI chef is crafting your personalized recipes...',
     loadingRecipesAlmostDone: 'Just a moment... AI is putting the final touches on your recipes!',
+    recommendationPlaceholderTitle: 'Ready to find your next meal?',
+    recommendationPlaceholderSubtitle: 'Select your priority ingredients and adjust filters to get the perfect recipe from our AIChef.',
     // Recipe Detail Modal
     ingredients: 'Ingredients',
     missingIngredients: 'Missing Ingredients',
@@ -140,11 +158,13 @@ export const translations = {
     cameraError: 'Could not open camera. Please check permissions.',
     // Shopping List
     shoppingListEmpty: 'Your shopping list is empty.',
+    shoppingListDetails: 'Add missing ingredients from recipes or add them manually.',
     addToShoppingList: 'Add to List',
     addedToShoppingList: 'Added',
     clearShoppingList: 'Clear List',
     // Saved Recipes
     savedRecipesEmpty: 'You haven\'t saved any recipes yet.',
+    savedRecipesDetails: 'Save delicious recipes you find to access them quickly here.',
     saveRecipe: 'Save Recipe',
     unsaveRecipe: 'Unsave',
     // Settings Modal
@@ -215,6 +235,7 @@ export const translations = {
     mainTitle: 'OhMyCook',
     mainSubtitle: '냉장고 재료로 만드는 AI 맞춤 레시피',
     loginButton: '로그인 / 회원가입',
+    getStarted: '시작하기',
     homeFooter: '재료를 선택하고 AI가 추천하는 레시피를 만나보세요',
     // Home Screen Menu
     profileTitle: '프로필',
@@ -233,6 +254,20 @@ export const translations = {
     shoppingListSubtitle: '구매할 재료 관리',
     savedRecipesTitle: '저장된 레시피',
     savedRecipesSubtitle: '즐겨찾는 요리',
+    // Navigation
+    cook: '요리',
+    chat: '채팅',
+    popular: '인기',
+    profile: '프로필',
+    navigate: '이동',
+    // Settings
+    settings: '설정',
+    customSettings: '맞춤 설정',
+    language: '언어',
+    generateRecipe: '레시피 생성',
+    selectIngredients: '재료 선택',
+    noIngredients: '재료가 없습니다. 냉장고에 재료를 추가해주세요!',
+    done: '완료',
     // Onboarding
     onboardingTitle: '요리 수준을 선택해주세요',
     onboardingSubtitle: '당신의 요리 실력에 맞는 레시피를 추천해드립니다',
@@ -286,6 +321,7 @@ export const translations = {
     scanWithReceipt: '영수증으로 스캔',
     noSearchResults: '검색 결과가 없습니다.',
     pleaseAddIngredients: '재료를 추가해주세요.',
+    scanning: '스캔 중...',
     // Ingredient Modal
     addIngredientTitle: '재료 추가',
     ingredientName: '재료명',
@@ -311,11 +347,13 @@ export const translations = {
     priorityIngredientsSubtitle: '먼저 사용하고 싶은 재료를 선택하세요.',
     loadingRecipes: 'AI 셰프가 맞춤 레시피를 만들고 있어요...',
     loadingRecipesAlmostDone: '잠시만요... AI가 레시피에 마지막 손길을 더하고 있어요!',
+    recommendationPlaceholderTitle: '맛있는 요리를 찾을 준비가 되셨나요?',
+    recommendationPlaceholderSubtitle: '우선 사용할 재료를 선택하고 필터를 조절하여 AI 셰프의 완벽한 추천을 받아보세요.',
     // Recipe Detail Modal
     ingredients: '재료',
     missingIngredients: '없는 재료',
     instructions: '요리 방법',
-     // AI Chef
+    // AI Chef
     aiChefTitle: 'AI 요리 어시스턴트',
     aiChefGreeting: '안녕하세요! 요리 관련 질문이 있으시면 언제든 물어보세요. 재료 손질법, 조리 온도, 대체 재료 등 무엇이든 도와드립니다.',
     askAnything: '궁금한 점을 물어보세요...',
@@ -348,11 +386,13 @@ export const translations = {
     cameraError: '카메라를 열 수 없습니다. 권한을 확인해주세요.',
     // Shopping List
     shoppingListEmpty: '장바구니가 비어있습니다.',
+    shoppingListDetails: '레시피에서 부족한 재료를 추가하거나 직접 입력하세요.',
     addToShoppingList: '목록에 추가',
     addedToShoppingList: '추가됨',
     clearShoppingList: '목록 비우기',
     // Saved Recipes
     savedRecipesEmpty: '저장된 레시피가 없습니다.',
+    savedRecipesDetails: '마음에 드는 레시피를 저장하여 여기서 빠르게 찾아보세요.',
     saveRecipe: '레시피 저장',
     unsaveRecipe: '저장 취소',
     // Settings Modal
@@ -401,7 +441,7 @@ export const translations = {
     seasoning: '조미료/소스',
     nutsSeeds: '견과류/씨앗',
     others: '기타',
-     // Auth
+    // Auth
     login: '로그인',
     signup: '회원가입',
     logout: '로그아웃',
