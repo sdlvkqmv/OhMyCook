@@ -244,6 +244,17 @@ export const translations = {
     loginFailed: 'Login failed. Please try again.',
     continueWithGoogle: 'Continue with Google',
     checkEmailForConfirmation: 'Check your email for the confirmation link.',
+    // Voice Chat & History
+    browserNotSupported: 'Browser does not support voice input.',
+    chatHistory: 'Chat History',
+    chatHistoryList: 'Chat History List',
+    generalChat: 'General Chat',
+    messages: 'messages',
+    noChatHistory: 'No chat history yet.',
+    startChatting: 'Start chatting/asking questions!',
+    hideHistory: 'Hide History',
+    showHistory: 'Show History',
+    back: 'Back',
   },
   ko: {
     // App
@@ -489,5 +500,16 @@ export const translations = {
     loginFailed: '로그인에 실패했습니다. 다시 시도해주세요.',
     continueWithGoogle: 'Google로 계속하기',
     checkEmailForConfirmation: '이메일함에서 확인 링크를 눌러주세요.',
+    // Voice Chat & History
+    browserNotSupported: '브라우저가 음성 입력을 지원하지 않습니다.',
+    chatHistory: '대화 기록',
+    chatHistoryList: '대화 기록 목록',
+    generalChat: '일반 대화',
+    messages: '메시지',
+    noChatHistory: '아직 대화 내역이 없습니다.',
+    startChatting: '질문을 시작해보세요!',
+    hideHistory: '기록 숨기기',
+    showHistory: '기록 보기',
+    back: '뒤로',
   },
 };

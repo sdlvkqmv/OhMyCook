@@ -293,12 +293,11 @@ const AppContent: React.FC = () => {
         max_cook_time: newSettings.maxCookTime,
         profile_image: newSettings.profileImage,
         has_completed_onboarding: true,
-        updated_at: new Date(),
       });
 
       if (error) {
         console.error("Error saving profile to Supabase:", error);
-        // Revert or show toast?
+        alert(`프로필 저장 실패: ${error.message}`);
       } else {
         // Update Local User State
         setCurrentUser(prev => prev ? { ...prev, hasCompletedOnboarding: true } : null);
@@ -369,11 +368,17 @@ const AppContent: React.FC = () => {
 
   const handleCreateCommunityPost = async (recipe: Recipe, note?: string) => {
     const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) return; // Should be logged in
+    if (!session?.user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    // Sanitize recipe to ensure no undefined values causing JSONB issues
+    const sanitizedRecipe = JSON.parse(JSON.stringify(recipe));
 
     const newPost = {
       author_id: session.user.id,
-      recipe: recipe,
+      recipe: sanitizedRecipe,
       note: note,
       likes: []
     };
@@ -382,9 +387,11 @@ const AppContent: React.FC = () => {
 
     if (error) {
       console.error("Error creating post:", error);
+      alert(`게시글 작성 실패: ${error.message}`);
     } else {
       // Refresh posts
       fetchCommunityPostsDetailed();
+      alert("게시글이 등록되었습니다.");
     }
   };
 

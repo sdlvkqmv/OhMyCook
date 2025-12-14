@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { UserSettings, ChatMessage, Recipe } from '../types';
-import { SendIcon, LogoIcon } from './icons';
+import { SendIcon, LogoIcon, MicIcon, MicOffIcon } from './icons';
 import Spinner from './Spinner';
 import { useLanguage } from '../context/LanguageContext';
 import Header from './Header';
@@ -14,6 +14,14 @@ interface ChatHistory {
   timestamp: number;
   messages: ChatMessage[];
 }
+
+declare global {
+  interface Window {
+    webkitSpeechRecognition: any;
+    SpeechRecognition: any;
+  }
+}
+
 
 interface AIChefProps {
   settings: UserSettings;
@@ -46,13 +54,15 @@ const AIChef: React.FC<AIChefProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [showSuggestedQuestions, setShowSuggestedQuestions] = useState(true);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { t, language } = useLanguage();
 
   // Build history list from all chat histories
   const historyList: ChatHistory[] = Object.entries(allChatHistories)
     .filter(([key, msgs]) => msgs.length > 0)
-    .map(([key, msgs]) => {
+    .map(([key, msgs]: [string, ChatMessage[]]) => {
       const isRecipe = key !== '__general__';
       const firstUserMsg = msgs.find(m => m.role === 'user');
       const summary = firstUserMsg?.parts[0]?.text.slice(0, 50) || t('chatHistory');
@@ -127,11 +137,11 @@ const AIChef: React.FC<AIChefProps> = ({
       console.log('History length:', history.length);
       console.log('User message:', textToSend);
       console.log('Calling AI Chef API with history:', history);
-      
+
       const responseText = await chatWithAIChef(history, textToSend, settings, language, recipeContext);
       console.log('=== AI Chef Response ===');
       console.log('Response:', responseText);
-      
+
       const modelMessage: ChatMessage = { role: 'model', parts: [{ text: responseText }] };
       setMessages(prev => [...prev, modelMessage]);
       setShowSuggestedQuestions(true);
@@ -175,7 +185,7 @@ const AIChef: React.FC<AIChefProps> = ({
           )}
           <h2 className="text-sm sm:text-base font-bold text-text-primary truncate">{headerTitle}</h2>
         </div>
-        <button 
+        <button
           onClick={() => setShowHistory(!showHistory)}
           className="px-3 py-1.5 text-sm bg-brand-primary text-white rounded-lg hover:bg-brand-dark transition-colors flex-shrink-0"
         >
@@ -188,36 +198,36 @@ const AIChef: React.FC<AIChefProps> = ({
           {/* History List View */}
           {showHistory && (
             historyList.length > 0 ? (
-            <div className="mb-6 space-y-2">
-              <h3 className="text-sm font-bold text-text-primary mb-3">{t('chatHistoryList') || '대화 기록'}</h3>
-              {historyList.map(hist => (
-                <button
-                  key={hist.key}
-                  onClick={() => {
-                    setShowHistory(false);
-                    onLoadHistory?.(hist.key);
-                  }}
-                  className="w-full text-left bg-surface border border-line-light rounded-lg p-3 hover:bg-brand-light transition-colors"
-                >
-                  {hist.recipeName && (
-                    <div className="text-xs font-bold text-brand-primary mb-1">
-                      🍳 {hist.recipeName}
+              <div className="mb-6 space-y-2">
+                <h3 className="text-sm font-bold text-text-primary mb-3">{t('chatHistoryList') || '대화 기록'}</h3>
+                {historyList.map(hist => (
+                  <button
+                    key={hist.key}
+                    onClick={() => {
+                      setShowHistory(false);
+                      onLoadHistory?.(hist.key);
+                    }}
+                    className="w-full text-left bg-surface border border-line-light rounded-lg p-3 hover:bg-brand-light transition-colors"
+                  >
+                    {hist.recipeName && (
+                      <div className="text-xs font-bold text-brand-primary mb-1">
+                        🍳 {hist.recipeName}
+                      </div>
+                    )}
+                    {!hist.recipeName && (
+                      <div className="text-xs font-bold text-text-secondary mb-1">
+                        💬 {t('generalChat') || '일반 대화'}
+                      </div>
+                    )}
+                    <div className="text-sm text-text-primary line-clamp-2">
+                      {hist.summary}...
                     </div>
-                  )}
-                  {!hist.recipeName && (
-                    <div className="text-xs font-bold text-text-secondary mb-1">
-                      💬 {t('generalChat') || '일반 대화'}
+                    <div className="text-xs text-text-secondary mt-1">
+                      {hist.messages.length} {t('messages') || 'messages'}
                     </div>
-                  )}
-                  <div className="text-sm text-text-primary line-clamp-2">
-                    {hist.summary}...
-                  </div>
-                  <div className="text-xs text-text-secondary mt-1">
-                    {hist.messages.length} {t('messages') || 'messages'}
-                  </div>
-                </button>
-              ))}
-            </div>
+                  </button>
+                ))}
+              </div>
             ) : (
               <div className="text-center py-8">
                 <p className="text-text-secondary">{t('noChatHistory') || '아직 대화 내역이 없습니다.'}</p>
@@ -232,9 +242,9 @@ const AIChef: React.FC<AIChefProps> = ({
               <p className="text-sm text-text-secondary mb-2">{t('suggestedQuestions')}</p>
               <div className="flex flex-wrap gap-2">
                 {suggestedQuestions.map(q => (
-                  <button 
-                    key={q} 
-                    onClick={() => handleSend(t(q))} 
+                  <button
+                    key={q}
+                    onClick={() => handleSend(t(q))}
                     className="bg-surface border border-line-light text-sm text-text-primary px-3 py-1.5 rounded-lg hover:bg-brand-light transition-colors"
                   >
                     {t(q)}
@@ -268,9 +278,9 @@ const AIChef: React.FC<AIChefProps> = ({
               <p className="text-sm text-text-secondary mb-2">{t('suggestedQuestions')}</p>
               <div className="flex flex-wrap gap-2">
                 {suggestedQuestions.map(q => (
-                  <button 
-                    key={q} 
-                    onClick={() => handleSend(t(q))} 
+                  <button
+                    key={q}
+                    onClick={() => handleSend(t(q))}
                     className="bg-surface border border-line-light text-sm text-text-primary px-3 py-1.5 rounded-lg hover:bg-brand-light transition-colors"
                   >
                     {t(q)}
@@ -318,6 +328,44 @@ const AIChef: React.FC<AIChefProps> = ({
             disabled={isLoading}
             className="flex-grow p-3 border border-line-light rounded-xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-primary/50 disabled:opacity-50"
           />
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => {
+              if (isListening) {
+                recognitionRef.current?.stop();
+                setIsListening(false);
+              } else {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                  alert(t('browserNotSupported') || "Browser does not support voice input.");
+                  return;
+                }
+                const recognition = new SpeechRecognition();
+                recognition.lang = language === 'ko' ? 'ko-KR' : 'en-US';
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+
+                recognition.onstart = () => setIsListening(true);
+                recognition.onend = () => setIsListening(false);
+                recognition.onerror = (event: any) => {
+                  console.error("Speech recognition error", event.error);
+                  setIsListening(false);
+                };
+                recognition.onresult = (event: any) => {
+                  const transcript = event.results[0][0].transcript;
+                  setInput(prev => prev + (prev ? ' ' : '') + transcript);
+                };
+
+                recognitionRef.current = recognition;
+                recognition.start();
+              }
+            }}
+            className={`p-3 rounded-xl transition-colors flex items-center justify-center aspect-square ${isListening ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`}
+            disabled={isLoading}
+          >
+            {isListening ? <MicOffIcon className="w-5 h-5" /> : <MicIcon className="w-5 h-5" />}
+          </motion.button>
           <motion.button
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.05 }}
