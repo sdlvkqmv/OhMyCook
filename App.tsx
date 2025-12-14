@@ -168,38 +168,83 @@ const AppContent: React.FC = () => {
   };
 
   // Improved fetch with Joins
+  // Improved fetch with Manual Joins to avoid schema relationship issues
   const fetchCommunityPostsDetailed = async () => {
-    const { data, error } = await supabase
+    // 1. Fetch Posts
+    const { data: postsData, error: postsError } = await supabase
       .from('community_posts')
-      .select(`
-        *,
-        profiles:author_id (nickname, profile_image),
-        community_comments (id, content, created_at, author_id)
-      `)
+      .select('*')
       .order('created_at', { ascending: false });
 
-    if (error) console.error("Posts fetch error:", error);
-    else if (data) {
-      const posts: CommunityPost[] = data.map((p: any) => ({
+    if (postsError) {
+      console.error("Posts fetch error:", postsError);
+      return;
+    }
+
+    if (!postsData || postsData.length === 0) {
+      setCommunityPosts([]);
+      return;
+    }
+
+    // 2. Collect Author IDs & Post IDs
+    const authorIds = [...new Set(postsData.map((p: any) => p.author_id))];
+    const postIds = postsData.map((p: any) => p.id);
+
+    // 3. Fetch Profiles
+    let profilesMap: Record<string, any> = {};
+    if (authorIds.length > 0) {
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('id, nickname, profile_image')
+        .in('id', authorIds);
+
+      if (profilesData) {
+        profilesData.forEach((p: any) => {
+          profilesMap[p.id] = p;
+        });
+      }
+    }
+
+    // 4. Fetch Comments
+    let commentsMap: Record<string, any[]> = {};
+    if (postIds.length > 0) {
+      const { data: commentsData } = await supabase
+        .from('community_comments')
+        .select('*')
+        .in('post_id', postIds)
+        .order('created_at', { ascending: true });
+
+      if (commentsData) {
+        commentsData.forEach((c: any) => {
+          if (!commentsMap[c.post_id]) commentsMap[c.post_id] = [];
+          commentsMap[c.post_id].push(c);
+        });
+      }
+    }
+
+    // 5. Map Data
+    const posts: CommunityPost[] = postsData.map((p: any) => {
+      const profile = profilesMap[p.author_id];
+      return {
         id: p.id,
-        authorEmail: '', // Not exposing email publicly for privacy usually, or fetch if needed
-        authorName: p.profiles?.nickname || 'Unknown Chef',
-        authorProfileImage: p.profiles?.profile_image,
+        authorEmail: '',
+        authorName: profile?.nickname || 'Unknown Chef',
+        authorProfileImage: profile?.profile_image,
         recipe: p.recipe,
         note: p.note,
         createdAt: p.created_at,
         likes: p.likes || [],
-        comments: p.community_comments?.map((c: any) => ({
+        comments: (commentsMap[p.id] || []).map((c: any) => ({
           id: c.id,
           content: c.content,
           createdAt: c.created_at,
           authorEmail: '',
-          authorName: 'User', // Need recursive join or separate fetch for comment authors? 
-          // For MVP, just show content
-        })) || []
-      }));
-      setCommunityPosts(posts);
-    }
+          authorName: 'User',
+        }))
+      };
+    });
+
+    setCommunityPosts(posts);
   };
 
 
