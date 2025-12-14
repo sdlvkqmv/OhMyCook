@@ -64,7 +64,7 @@ const AppContent: React.FC = () => {
 
   // Navigation State
   const [currentView, setCurrentView] = useState<View>('tab');
-  const [currentTab, setCurrentTab] = useState<Tab>('cook');
+  const [currentTab, setCurrentTab] = useLocalStorage<Tab>(`ohmycook-currentTab-${userStorageSuffix}`, 'cook');
   const [previousView, setPreviousView] = useState<View>('tab');
   const [navigationDirection, setNavigationDirection] = useState<'left' | 'right' | 'fade'>('left');
   const [chatContext, setChatContext] = useState<Recipe | null>(null);

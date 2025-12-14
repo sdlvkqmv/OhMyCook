@@ -176,7 +176,7 @@ const AIChef: React.FC<AIChefProps> = ({
 
   return (
     <div className={`flex flex-col h-screen bg-background ${!showBack ? 'pb-24' : ''}`}>
-      <div className="flex items-center justify-between px-4 py-3 border-b bg-surface gap-2 pt-[calc(0.75rem+env(safe-area-inset-top))]">
+      <div className="flex items-center justify-between px-4 py-3 border-b bg-surface gap-2">
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {showBack && (
             <button onClick={handleBack} className="text-text-primary text-lg flex-shrink-0">
