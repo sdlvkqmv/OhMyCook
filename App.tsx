@@ -243,8 +243,28 @@ const AppContent: React.FC = () => {
     // Fetch Community Posts
     fetchCommunityPostsDetailed();
 
+    // Subscribe to real-time updates for community posts
+    const postsSubscription = supabase
+      .channel('community_posts_changes')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'community_posts' },
+        () => {
+          // Refresh posts when any change occurs (insert, update, delete)
+          fetchCommunityPostsDetailed();
+        }
+      )
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'community_comments' },
+        () => {
+          // Refresh posts when comments change
+          fetchCommunityPostsDetailed();
+        }
+      )
+      .subscribe();
+
     return () => {
       subscription.unsubscribe();
+      postsSubscription.unsubscribe();
     };
   }, []);
 
