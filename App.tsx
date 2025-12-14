@@ -32,10 +32,15 @@ type View = 'tab' | 'onboarding' | 'recommendations' | 'chat' | 'shoppingList' |
 
 // Main App Content Component
 const AppContent: React.FC = () => {
-  const [settings, setSettings] = useLocalStorage<UserSettings>('ohmycook-settings', defaultSettings);
-  const [ingredients, setIngredients] = useLocalStorage<Ingredient[]>('ohmycook-ingredients', []);
-  const [shoppingList, setShoppingList] = useLocalStorage<ShoppingListItem[]>('ohmycook-shoppinglist', []);
-  const [savedRecipes, setSavedRecipes] = useLocalStorage<Recipe[]>('ohmycook-savedrecipes', []);
+  const [users, setUsers] = useLocalStorage<User[]>('ohmycook-users', []);
+  const [currentUser, setCurrentUser] = useLocalStorage<User | null>('ohmycook-currentUser', null);
+
+  const userStorageSuffix = currentUser?.email ?? 'guest';
+
+  const [settings, setSettings] = useLocalStorage<UserSettings>(`ohmycook-settings-${userStorageSuffix}`, defaultSettings);
+  const [ingredients, setIngredients] = useLocalStorage<Ingredient[]>(`ohmycook-ingredients-${userStorageSuffix}`, []);
+  const [shoppingList, setShoppingList] = useLocalStorage<ShoppingListItem[]>(`ohmycook-shoppinglist-${userStorageSuffix}`, []);
+  const [savedRecipes, setSavedRecipes] = useLocalStorage<Recipe[]>(`ohmycook-savedrecipes-${userStorageSuffix}`, []);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Navigation State
@@ -47,9 +52,6 @@ const AppContent: React.FC = () => {
   const [chatHistories, setChatHistories] = useState<Record<string, ChatMessage[]>>({});
   const [chatOpenedFromRecipe, setChatOpenedFromRecipe] = useState<Recipe | null>(null);
   const [openedRecipeModal, setOpenedRecipeModal] = useState<Recipe | null>(null);
-
-  const [users, setUsers] = useLocalStorage<User[]>('ohmycook-users', []);
-  const [currentUser, setCurrentUser] = useLocalStorage<User | null>('ohmycook-currentUser', null);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
 
   const { language, t } = useLanguage();
