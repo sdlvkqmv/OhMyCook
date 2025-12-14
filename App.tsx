@@ -373,8 +373,17 @@ const AppContent: React.FC = () => {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    // State clearing handled in useEffect
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Logout error:", error);
+      alert("로그아웃 실패: " + error.message);
+    }
+
+    // Explicitly clear state to ensure UI updates immediately
+    setCurrentUser(null);
+    setSettings(defaultSettings);
+    setCurrentView('tab');
+    setCurrentTab('cook');
   };
 
   const handleCreateCommunityPost = async (recipe: Recipe, note?: string) => {
