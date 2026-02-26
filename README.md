@@ -16,11 +16,7 @@ OhMyCook is an AI-powered recipe assistant application that recommends personali
 * **Analytics**: Vercel Speed Insights
 
 ## 👨‍💻 Team Member
-
-KIM DONG-GI
-SHIN GYUCHEOL
-JANG JUNHA
-JO SEOKJUN
+|KIM DONG-GI|SHIN GYUCHEOL|JANG JUNHA|JO SEOKJUN
 
 
 
