@@ -17,7 +17,7 @@ OhMyCook is an AI-powered recipe assistant application that recommends personali
 
 ## 👨‍💻 Team Member
 |------|------|------|------|
-|KIM DONG-GI|SHIN GYUCHEOL|JANG JUNHA|JO SEOKJUN
+| KIM DONG-GI | SHIN GYUCHEOL | JANG JUNHA | JO SEOKJUN |
 
 
 
